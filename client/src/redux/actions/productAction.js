@@ -1,7 +1,7 @@
 import { setProducts, setLoading, setError, setPagination } from "../slices/product";
 import  axios from 'axios';
 
-export const getAllProduct = (page, favouriteToogle) => async(dispatch) =>{
+export const getAllProducts = (page, favouriteToogle) => async(dispatch) =>{
     dispatch(setLoading())
     try{
         const { data } = await axios.get('http://localhost:5000/api/products');
