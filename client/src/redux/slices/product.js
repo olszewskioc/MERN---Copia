@@ -1,15 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+// The initial  state of the App
 export const initialState = {
 	loading: false,
 	error: null,
 	products: [],
 	product: null,
 	pagination: {},
-	favoritesToggled: true,
+	favoritesToggled: false,
+	reviewed: false,
 	favorites: JSON.parse(localStorage.getItem('favorites')) ?? [],
 };
 
+// The reducers of the products and all the states  that they can have
 export const productsSlice = createSlice({
 	name: 'products',
 	initialState,
@@ -21,6 +23,12 @@ export const productsSlice = createSlice({
 			state.loading = false;
 			state.error = null;
 			state.products = payload;
+		},
+		setProduct: (state, { payload }) => {
+			state.loading = false;
+			state.error = null;
+			state.product = payload;
+			state.reviewed = false;
 		},
 		setError: (state, { payload }) => {
 			state.loading = false;
@@ -40,7 +48,7 @@ export const productsSlice = createSlice({
 	},
 });
 
-export const { setLoading, setError, setProducts, setPagination, setFavoritesToggle, setFavorites } =
+export const { setLoading, setError, setProducts, setPagination, setFavoritesToggle, setFavorites, setProduct } =
 	productsSlice.actions;
 
 export default productsSlice.reducer;

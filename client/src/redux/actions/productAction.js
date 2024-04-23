@@ -1,6 +1,7 @@
-import { setProducts, setLoading, setError, setPagination, setFavorites, setFavoritesToggle } from "../slices/product";
+import { setProducts, setLoading, setError, setPagination, setFavorites, setFavoritesToggle, setProduct } from "../slices/product";
 import  axios from 'axios';
 
+// Get products list in the pagination
 export const getProducts = (page, favouriteToogle) => async(dispatch) =>{
     dispatch(setLoading())
     try{
@@ -54,3 +55,19 @@ export const toggleFavorites = (toggle) => async (dispatch, getState) => {
 		dispatch(getProducts(1));
 	}
 };
+
+export const getProduct = (id) => async (dispatch) => {
+    dispatch(setLoading(true));
+    try {
+        const {data} = await axios.get(`http://localhost:5000/api/products/${id}`);
+        dispatch(setProduct(data));
+    } catch (error) {
+        dispatch(setError(
+            error.response && error.response.data.message 
+            ? error.response.data.message 
+            : error.message 
+            ? error.message 
+            : 'Unexpected Error occured! Please try again later!'
+            ))
+    }
+}
