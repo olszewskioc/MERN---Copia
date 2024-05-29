@@ -5,9 +5,10 @@ import { BsPhoneFlip } from  "react-icons/bs";
 import { Link as ReactLink } from 'react-router-dom';
 import { MdOutlineFavorite, MdOutlineFavoriteBorder } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleFavorites } from '../redux/actions/productAction';
+import { toggleFavorites } from '../redux/actions/productActions';
 import { BiUserCheck }  from 'react-icons/bi';
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
+import { TbShoppingCart } from  'react-icons/tb'
 import ColorModeToogle from './ColorModeToogle';
 import NavLink from './NavLink';
 
@@ -23,6 +24,7 @@ const Header = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const dispatch = useDispatch();
 	const { favoritesToggled } = useSelector((state) => state.product);
+	const { cartItems } = useSelector((state) => state.cart)
 
 	useEffect(() => {}, [favoritesToggled, dispatch]);
 
@@ -32,6 +34,12 @@ const Header = () => {
 			<Flex h={16} alignItems={"center"} justifyContent="space-between">
 				<Flex display={{'base': 'flex', 'md': 'none'}} alignItems={'center'}>
 					<IconButton bg={'parent'} size={'md'} icon={isOpen ? <CloseIcon /> : <HamburgerIcon />} onClick={isOpen ? onClose : onOpen}/>
+					<IconButton ml={'12'} position={'absolute'} icon={<TbShoppingCart size={'20px'}/>} as={ReactLink} to={'/cart'} variant={'ghost'}/>
+					{cartItems.length > 0 && (
+						<Text fontSize={'sm'} fontWeight={'bold'} fontStyle={'italic'} position={'absolute'} ml={'74px'} mt={'-6'}>
+							{cartItems.length}
+						</Text>
+					)}
 				</Flex>
 				<HStack spacing={8} alignItems='center'>
 					<Box alignItems={'center'} display={'flex'} as={ReactLink} to="/">
@@ -58,6 +66,14 @@ const Header = () => {
 								variant='ghost'
 							/>
 						)}
+						<Box>
+							<IconButton icon={<TbShoppingCart size={'20px'}/>} as={ReactLink} to={'/cart'} variant={'ghost'}/>
+							{cartItems.length > 0 && (
+								<Text align={'center'}  fontSize={'sm'} fontWeight={'bold'} fontStyle={'italic'} position={'absolute'} ml={'26px'} mt={'-6'}>
+									{cartItems.length}
+								</Text>
+							)}
+						</Box>
 					</HStack>
 				</HStack>
 				<Flex alignItems={'center'}>
