@@ -126,10 +126,47 @@ const passwordReset = asyncHandler(async (req, res) => {
     }
 })
 
+// Google Login
+const googleLogin = asyncHandler(async (req, res) => {
+    const { googleId, email, name, googleImage } = req.body;
+    try {
+        const user = await User.findOne({googleId: googleId});
+        if (user) {
+            user.firstLogin = false;
+            await user.save();
+            res.json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                googleImage: user.googleImage,
+                googleId: user.googleId,
+                isAdmin: user.isAdmin,
+                token: genToken(user._id),
+                active: user.active,
+                firstLogin: user.firstLogin,
+                created: user.createdAt
+            });
+            } else {
+                const newUser = await User.create({ 
+                    googleId: googleId,
+                    name: name,
+                    email: email,
+                    googleImage: googleImage
+                });
+                const newToken = genToken(newUser._id);
+                sendVerificationEmail(newToken, newUser.email, newUser.name)
+                res.json({ newToken, newUser });
+                }
+    } catch (error) {
+        res.status(401).send('Google login failed!')
+    }
+})
+
 userRoutes.route('/login').post(loginUser);
 userRoutes.route('/register').post(registerUser);
 userRoutes.route('/verify-email').get(verifyEmail);
 userRoutes.route('/password-reset-request').post(passwordResetRequest);
 userRoutes.route('/password-reset').post(passwordReset);
+userRoutes.route('/google-login').post(googleLogin);
 
 export default userRoutes
