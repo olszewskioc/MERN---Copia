@@ -118,5 +118,29 @@ export const resetPassword = (password, token) => async (dispatch) => {
 };
 
 export const resetState = () => async (dispatch) => {
-    dispatch(stateReset());
-}
+	dispatch(stateReset());
+};
+
+export const googleLogin = (googleId, email, name, googleImage) => async (dispatch) => {
+	dispatch(setLoading());
+	try {
+		const config = { headers: { "Content-Type": "application/json" } };
+		const { data } = await axios.post(
+			"http://localhost:5000/api/users/google-login",
+			{ googleId, email, name, googleImage },
+			config
+		);
+		dispatch(userLogin(data));
+		localStorage.setItem("userInfo", JSON.stringify(data));
+	} catch (error) {
+		dispatch(
+			setError(
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message
+					? error.message
+					: "Unexpected Error occured! Please try again later!"
+			)
+		);
+	}
+};
