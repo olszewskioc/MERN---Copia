@@ -42,7 +42,7 @@ function App() {
 							<Route path="/products" element={<ProductsScreen />} />
 							<Route path="/product/:id" element={<ProductScreen />} />
 							<Route path="/cart" element={<CartScreen />} />
-							<Route path="/register" element={<RegistrationScreen />} />
+							<Route path="/registration" element={<RegistrationScreen />} />
 							<Route path="/login" element={<LoginScreen />} />
 							<Route path="/email-verify/:token" element={<EmailVerificationScreen />} />
 							<Route path="/password-reset/:token" element={<PasswordResetScreen />} />
